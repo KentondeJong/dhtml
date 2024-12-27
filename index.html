@@ -7,20 +7,50 @@
 
 <body>
 
-    <nav-d></nav-d>
+    <nav-d title="Menu"></nav-d>
     
     <heading-d></heading-d>
 
-    <nav-d></nav-d>
+    <title-d title="Actors"></title-d>
+
+    <ul foreach src="data/actors.json">
+        <li><span name="name"></span>
+            <ul>
+                <li><span name="birthdate"></span></li>
+                <li><span name="movie"></span></li>
+            </ul>
+        </li>
+    </ul>
+
+    <title-d title="Superheros"></title-d>
+
+    <ul foreach src="data/superheroes.xml" key="superhero">
+        <li><span name="name"></span>
+            <ul>
+                <li><span name="realName"></span></li>
+                <li><span name="movie"></span></li>
+            </ul>
+        </li>
+    </ul>
+
+    <nav-d title="Footer"></nav-d>
 
 
 
-    <template target="nav-d" src="templates/nav.html" ></template>
 
-    <template target="heading-d">
-        <h1>This is a heading</h1>
+
+    <template id="nav-d" title src="templates/nav.html" ></template>
+
+    <template id="heading-d">
+        <title-d title="This is a heading"></title-d>
         <a href="#">This is a button</a>
     </template>
+
+    <template id="title-d" title>
+        <h1 style="color: red">{{title}}</h1>
+    </template>
+
+
 
     <script src="scripts/dhtml.js"></script>
 </body>

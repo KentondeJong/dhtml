@@ -1,0 +1,52 @@
+[
+    {
+        "name": "Leonardo DiCaprio",
+        "birthdate": "1974-11-11",
+        "movie": "Inception"
+    },
+    {
+        "name": "Meryl Streep",
+        "birthdate": "1949-06-22",
+        "movie": "The Devil Wears Prada"
+    },
+    {
+        "name": "Denzel Washington",
+        "birthdate": "1954-12-28",
+        "movie": "Training Day"
+    },
+    {
+        "name": "Scarlett Johansson",
+        "birthdate": "1984-11-22",
+        "movie": "Avengers: Endgame"
+    },
+    {
+        "name": "Tom Hanks",
+        "birthdate": "1956-07-09",
+        "movie": "Forrest Gump"
+    },
+    {
+        "name": "Natalie Portman",
+        "birthdate": "1981-06-09",
+        "movie": "Black Swan"
+    },
+    {
+        "name": "Will Smith",
+        "birthdate": "1968-09-25",
+        "movie": "Men in Black"
+    },
+    {
+        "name": "Emma Stone",
+        "birthdate": "1988-11-06",
+        "movie": "La La Land"
+    },
+    {
+        "name": "Morgan Freeman",
+        "birthdate": "1937-06-01",
+        "movie": "The Shawshank Redemption"
+    },
+    {
+        "name": "Cate Blanchett",
+        "birthdate": "1969-05-14",
+        "movie": "The Lord of the Rings: The Fellowship of the Ring"
+    }
+]

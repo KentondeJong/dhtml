@@ -1,0 +1,52 @@
+<superheroes>
+    <superhero>
+        <name>Spider-Man</name>
+        <realName>Peter Parker</realName>
+        <movie>Spider-Man: No Way Home</movie>
+    </superhero>
+    <superhero>
+        <name>Iron Man</name>
+        <realName>Tony Stark</realName>
+        <movie>Iron Man</movie>
+    </superhero>
+    <superhero>
+        <name>Wonder Woman</name>
+        <realName>Diana Prince</realName>
+        <movie>Wonder Woman</movie>
+    </superhero>
+    <superhero>
+        <name>Batman</name>
+        <realName>Bruce Wayne</realName>
+        <movie>The Dark Knight</movie>
+    </superhero>
+    <superhero>
+        <name>Superman</name>
+        <realName>Clark Kent</realName>
+        <movie>Man of Steel</movie>
+    </superhero>
+    <superhero>
+        <name>Black Widow</name>
+        <realName>Natasha Romanoff</realName>
+        <movie>Black Widow</movie>
+    </superhero>
+    <superhero>
+        <name>Thor</name>
+        <realName>Thor Odinson</realName>
+        <movie>Thor: Ragnarok</movie>
+    </superhero>
+    <superhero>
+        <name>Captain America</name>
+        <realName>Steve Rogers</realName>
+        <movie>Captain America: The First Avenger</movie>
+    </superhero>
+    <superhero>
+        <name>Black Panther</name>
+        <realName>T'Challa</realName>
+        <movie>Black Panther</movie>
+    </superhero>
+    <superhero>
+        <name>Captain Marvel</name>
+        <realName>Carol Danvers</realName>
+        <movie>Captain Marvel</movie>
+    </superhero>
+</superheroes>

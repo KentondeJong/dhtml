@@ -1,30 +1,93 @@
-document.querySelectorAll('template').forEach(el => {
-    getData(el) 
-    displayData(el);
-});
+async function fetchAndParseData(url) {
+    const response = await fetch(url);
+    const contentType = response.headers.get('content-type');
+    
+    if (contentType.includes('application/json')) {
+        return await response.json();
+    } else if (contentType.includes('application/xml') || contentType.includes('text/xml')) {
+        const text = await response.text();
+        const parser = new DOMParser();
+        return parser.parseFromString(text, 'application/xml');
+    } 
+    throw new Error('Unsupported content type');
+}
 
-async function getData(el) {
+function populateTemplate(template, item, isXML = false) {
+    const clone = template.cloneNode(true);
+    clone.querySelectorAll('[name]').forEach(field => {
+        const fieldName = field.getAttribute('name');
+        const value = isXML ? item.querySelector(fieldName)?.textContent : item[fieldName];
+        if (value) field.textContent = value;
+    });
+    return clone;
+}
+
+async function processForEachElement(el) {
     const url = el.getAttribute('src');
-    if (!url) return false
+    if (!url) return;
 
     try {
-        const response = await fetch(url);
-        const content = await response.text();
-        const temp = document.createElement('div');
-        temp.innerHTML = content;
-        el.content.appendChild(temp);
-        displayData(el);
+        const data = await fetchAndParseData(url);
+        const structure = el.cloneNode(true);
+        el.innerHTML = '';
+
+        const isXML = data instanceof Document;
+        const items = isXML ? data.querySelectorAll(el.getAttribute('key') || 'key') : data;
+
+        items.forEach(item => {
+            const populatedTemplate = populateTemplate(structure, item, isXML);
+            el.appendChild(isXML ? populatedTemplate.firstElementChild : populatedTemplate);
+        });
     } catch (error) {
         console.error(error.message);
     }
 }
 
-function displayData(el) {
-    const target = el.getAttribute('target');
-    if (!target) return false
-
-    const content = el.innerHTML;
-    document.querySelectorAll(`${target}`).forEach(_el => {
-        _el.insertAdjacentHTML("beforeend", content);
+function processTemplateElements() {
+    document.querySelectorAll('template').forEach(template => {
+        const id = template.getAttribute('id');
+        const nonRendered = document.querySelectorAll(`${id}:not([rendered])`);
+        nonRendered.length > 0 && processTemplateElement(template)
     });
 }
+
+async function processTemplateElement(template, html = '') {
+    const url = template.getAttribute('src');
+    if (url && html == '') {
+        try {
+            const response = await fetch(url);
+            const content = await response.text();
+            processTemplateElement(template, content);
+        } catch (error) {
+            console.error(error.message);
+        }
+    } else {
+        const content = html == '' ?  template.innerHTML : html;
+        displayData(template, content);
+    }
+}
+
+function displayData(template, content) {
+    const id = template.getAttribute('id');
+    if (!id) return;
+
+    document.querySelectorAll(`${id}:not([rendered])`).forEach(el => {
+        let modifiedContent = content;
+        const attrs = [...el.attributes];
+        
+        attrs.forEach(attr => {
+            modifiedContent = modifiedContent.replaceAll(`{{${attr.name}}}`, attr.nodeValue);
+        });
+
+        el.insertAdjacentHTML("beforeend", modifiedContent);
+
+        el.setAttribute('rendered', true);
+    
+    });
+
+    processTemplateElements();
+}
+
+// Main execution
+processTemplateElements();
+document.querySelectorAll('[foreach]').forEach(processForEachElement);
