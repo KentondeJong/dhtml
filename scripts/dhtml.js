@@ -89,5 +89,41 @@ function displayData(template, content) {
 }
 
 // Main execution
-processTemplateElements();
-document.querySelectorAll('[foreach]').forEach(processForEachElement);
+
+async function loadTemplates() {
+    try {
+        const manifestoResponse = await fetch('templates/manifesto.txt');
+        if (!manifestoResponse.ok) {
+            throw new Error(`Failed to load manifesto: ${manifestoResponse.status}`);
+        }
+
+        const manifestoText = await manifestoResponse.text();
+        const templateFiles = manifestoText.split('\n').map(file => file.trim()).filter(file => file);
+
+        for (const templateFile of templateFiles) {
+            try {
+                const templateResponse = await fetch(`templates/${templateFile}`);
+                if (!templateResponse.ok) {
+                    throw new Error(`Failed to load template: ${templateFile} - ${templateResponse.status}`);
+                }
+                let content = await templateResponse.text();
+
+                document.body.insertAdjacentHTML("beforeend",  content);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        processTemplateElements();
+        document.querySelectorAll('[foreach]').forEach(processForEachElement);
+
+    } catch (error) {
+        console.error('Error loading templates:', error);
+    }
+}
+
+// Call the function to load templates
+loadTemplates();
+
+

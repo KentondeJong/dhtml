@@ -1,0 +1,3 @@
+heading-d.html
+nav-d.html
+title-d.html
