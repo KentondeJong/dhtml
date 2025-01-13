@@ -7,33 +7,28 @@
 
 <body>
 
-    <nav-d title="Menu"></nav-d>
+    <nav- title="Menu"></nav->
     
-    <heading-d></heading-d>
+    <heading-></heading->
 
-    <title-d title="Actors"></title-d>
+    <img- src="assets/images/girl-logo.png" alt="Pixel Pop Girl Logo"></img->
 
-    <ul foreach src="data/actors.json">
-        <li><span name="name"></span>
+    <img- src="assets/images/text-logo.png" alt="Text Logo"></img->
+
+    <actors-></actors->
+
+    <title- title="Superheros"></title->
+
+    <ul foreach src="data/superheroes.xml">
+        <li>{{superhero.name}}
             <ul>
-                <li><span name="birthdate"></span></li>
-                <li><span name="movie"></span></li>
+                <li>{{superhero.realName}}</li>
+                <li>{{superhero.movie}}</li>
             </ul>
         </li>
     </ul>
 
-    <title-d title="Superheros"></title-d>
-
-    <ul foreach src="data/superheroes.xml" key="superhero">
-        <li><span name="name"></span>
-            <ul>
-                <li><span name="realName"></span></li>
-                <li><span name="movie"></span></li>
-            </ul>
-        </li>
-    </ul>
-
-    <nav-d title="Footer"></nav-d>
+    <nav- title="Footer"></nav->
     
     <script src="scripts/dhtml.js"></script>
 </body>

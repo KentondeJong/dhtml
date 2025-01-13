@@ -2,8 +2,11 @@
     {
         "name": "Leonardo DiCaprio",
         "birthdate": "1974-11-11",
-        "movie": "Inception"
-    },
+        "movie": {
+            "title": "Inception",
+            "year": 2010
+        }
+    },    
     {
         "name": "Meryl Streep",
         "birthdate": "1949-06-22",

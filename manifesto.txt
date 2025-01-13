@@ -1,0 +1,5 @@
+templates/heading.html
+templates/nav.html
+templates/title.html
+templates/actors.html
+templates/img.html

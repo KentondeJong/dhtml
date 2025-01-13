@@ -14,11 +14,55 @@ async function fetchAndParseData(url) {
 
 function populateTemplate(template, item, isXML = false) {
     const clone = template.cloneNode(true);
-    clone.querySelectorAll('[name]').forEach(field => {
-        const fieldName = field.getAttribute('name');
-        const value = isXML ? item.querySelector(fieldName)?.textContent : item[fieldName];
-        if (value) field.textContent = value;
+    const regex = /{{(.*?)}}/g;
+    
+    const elementsToRemove = [];
+
+    clone.innerHTML = clone.innerHTML.replace(regex, (match, p1) => {
+        let value;
+        if (isXML) {
+            const path = p1.split('.');
+            const selectorPath = path.join(' > ');
+            value = item.querySelector(selectorPath);
+            value = value ? value.textContent : null;
+        } else {
+            const parts = p1.split('.');
+            value = item;
+            for (let part of parts) {
+                value = value[part];
+                if (value === undefined) {
+                    value = null;
+                    break;
+                }
+            }
+        }
+
+        if (value === null) {
+            const placeholder = document.createElement('span');
+            placeholder.setAttribute('data-remove', 'true');
+            elementsToRemove.push(placeholder);
+            return placeholder.outerHTML;
+        }
+
+        return value;
     });
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = clone.innerHTML;
+
+    elementsToRemove.forEach(placeholder => {
+        const element = tempDiv.querySelector('span[data-remove="true"]');
+        if (element) {
+            const parentLi = element.parentElement;
+            if (parentLi) {
+                parentLi.remove();
+            } else {
+                element.remove();
+            }
+        }
+    });
+
+    clone.innerHTML = tempDiv.innerHTML;
     return clone;
 }
 
@@ -32,11 +76,16 @@ async function processForEachElement(el) {
         el.innerHTML = '';
 
         const isXML = data instanceof Document;
-        const items = isXML ? data.querySelectorAll(el.getAttribute('key') || 'key') : data;
+        let items;
+        if (isXML) {
+            items = Array.from(data.documentElement.children);
+        } else {
+            items = Array.isArray(data) ? data : [data];
+        }
 
         items.forEach(item => {
             const populatedTemplate = populateTemplate(structure, item, isXML);
-            el.appendChild(isXML ? populatedTemplate.firstElementChild : populatedTemplate);
+            el.appendChild(populatedTemplate.firstElementChild);
         });
     } catch (error) {
         console.error(error.message);
@@ -92,7 +141,7 @@ function displayData(template, content) {
 
 async function loadTemplates() {
     try {
-        const manifestoResponse = await fetch('templates/manifesto.txt');
+        const manifestoResponse = await fetch('manifesto.txt');
         if (!manifestoResponse.ok) {
             throw new Error(`Failed to load manifesto: ${manifestoResponse.status}`);
         }
@@ -102,7 +151,7 @@ async function loadTemplates() {
 
         for (const templateFile of templateFiles) {
             try {
-                const templateResponse = await fetch(`templates/${templateFile}`);
+                const templateResponse = await fetch(`${templateFile}`);
                 if (!templateResponse.ok) {
                     throw new Error(`Failed to load template: ${templateFile} - ${templateResponse.status}`);
                 }
